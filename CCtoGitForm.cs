@@ -13,6 +13,8 @@ namespace CCtoGit
 {
     public partial class CCtoGitForm : Form
     {
+        // todo : Symbolic link 지원
+        // todo : migration 작업 상태 표시
         // todo : Form 이 Wizard 형식이면 더 좋을 것 같다.
 
         private DirectoryInfo vobRootDir = null;

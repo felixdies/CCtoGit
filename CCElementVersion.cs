@@ -18,6 +18,12 @@ namespace CCtoGit
             ParseFileInfo(versionInfo);
         }
 
+        public CCElementVersion(string vobPath, string versionInfo)
+        {
+            this.VobPath = vobPath;
+            ParseFileInfo(versionInfo);
+        }
+
         public string Attributes { get; set; }
 
         public string Comment { get; set; }
