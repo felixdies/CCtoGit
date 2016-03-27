@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CCElementVersion.cs" />
     <Compile Include="CCtoGit.cs" />
     <Compile Include="CCtoGitForm.cs">
       <SubType>Form</SubType>

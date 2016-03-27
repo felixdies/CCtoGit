@@ -54,7 +54,7 @@
             // 
             this.MigrationButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.MigrationButton.Location = new System.Drawing.Point(10, 122);
-            this.MigrationButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.MigrationButton.Margin = new System.Windows.Forms.Padding(2);
             this.MigrationButton.Name = "MigrationButton";
             this.MigrationButton.Size = new System.Drawing.Size(121, 35);
             this.MigrationButton.TabIndex = 0;
@@ -64,14 +64,16 @@
             // 
             // treeView1
             // 
+            this.treeView1.CheckBoxes = true;
             this.treeView1.ImageIndex = 0;
             this.treeView1.ImageList = this.imageList1;
             this.treeView1.Location = new System.Drawing.Point(158, 65);
-            this.treeView1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.treeView1.Margin = new System.Windows.Forms.Padding(2);
             this.treeView1.Name = "treeView1";
             this.treeView1.SelectedImageIndex = 0;
             this.treeView1.Size = new System.Drawing.Size(563, 414);
             this.treeView1.TabIndex = 4;
+            this.treeView1.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterCheck);
             // 
             // imageList1
             // 
@@ -97,7 +99,7 @@
             // 
             this.FilePicture.Image = global::CCtoGit.Properties.Resources.file;
             this.FilePicture.Location = new System.Drawing.Point(10, 298);
-            this.FilePicture.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.FilePicture.Margin = new System.Windows.Forms.Padding(2);
             this.FilePicture.Name = "FilePicture";
             this.FilePicture.Size = new System.Drawing.Size(40, 42);
             this.FilePicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -109,7 +111,7 @@
             this.SymLinkPicture.Image = global::CCtoGit.Properties.Resources.folder_link;
             this.SymLinkPicture.InitialImage = null;
             this.SymLinkPicture.Location = new System.Drawing.Point(10, 252);
-            this.SymLinkPicture.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.SymLinkPicture.Margin = new System.Windows.Forms.Padding(2);
             this.SymLinkPicture.Name = "SymLinkPicture";
             this.SymLinkPicture.Size = new System.Drawing.Size(40, 42);
             this.SymLinkPicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -121,7 +123,7 @@
             this.FolderPicture.Image = global::CCtoGit.Properties.Resources.folder;
             this.FolderPicture.InitialImage = null;
             this.FolderPicture.Location = new System.Drawing.Point(10, 205);
-            this.FolderPicture.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.FolderPicture.Margin = new System.Windows.Forms.Padding(2);
             this.FolderPicture.Name = "FolderPicture";
             this.FolderPicture.Size = new System.Drawing.Size(40, 42);
             this.FolderPicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -171,7 +173,7 @@
             // progressBar1
             // 
             this.progressBar1.Location = new System.Drawing.Point(10, 517);
-            this.progressBar1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.progressBar1.Margin = new System.Windows.Forms.Padding(2);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(711, 19);
             this.progressBar1.TabIndex = 10;
@@ -199,7 +201,7 @@
             // 
             this.OpenVobButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.OpenVobButton.Location = new System.Drawing.Point(10, 73);
-            this.OpenVobButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.OpenVobButton.Margin = new System.Windows.Forms.Padding(2);
             this.OpenVobButton.Name = "OpenVobButton";
             this.OpenVobButton.Size = new System.Drawing.Size(121, 35);
             this.OpenVobButton.TabIndex = 13;
@@ -226,7 +228,7 @@
             this.Controls.Add(this.SymLinkPicture);
             this.Controls.Add(this.FolderPicture);
             this.Controls.Add(this.MigrationButton);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "CCtoGitForm";
             this.Text = "CCtoGit";
             this.Load += new System.EventHandler(this.CCtoGitForm_Load);
