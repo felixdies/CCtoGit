@@ -4,12 +4,15 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace CCtoGit
 {
     public abstract class Executor
     {
+			private string ExecutionResult = string.Empty;
+
         protected abstract string Command { get; }
 
         protected string ExecutingPath { get; set; }
@@ -53,13 +56,21 @@ namespace CCtoGit
             }
         }
 
+				private void ReadExecutionResult(object sendingProcess, DataReceivedEventArgs outLine)
+				{
+					if (!String.IsNullOrEmpty(outLine.Data))
+					{
+						this.ExecutionResult += outLine.Data + Environment.NewLine;
+					}
+				}
+
         /// <summary>
         /// 주어진 명령어 리스트를 모두 실행하고 그 결과를 반환 한다.
         /// Input 을 redirect 하기 위해 CreateNoWindow 를 false 로 설정하므로, 커맨드창이 나타나는 부작용이 있다.
         /// </summary>
         protected string GetExecutedResult(List<string> argList)
         {
-            List<string> resultOutputList = new List<string>();
+					this.ExecutionResult = string.Empty;
 
             ProcessStartInfo proInfo = new ProcessStartInfo("cmd")
             {
@@ -75,15 +86,15 @@ namespace CCtoGit
             proc.StartInfo = proInfo;
             proc.Start();
 
-            StreamWriter inputWriter = proc.StandardInput;
-            inputWriter.AutoFlush = true;
-
+						proc.OutputDataReceived += new DataReceivedEventHandler(this.ReadExecutionResult);
+						proc.BeginOutputReadLine();
+						
             foreach (string arg in argList)
             {
-                inputWriter.WriteLine(Command + " " + arg);
+							proc.StandardInput.WriteLine(Command + " " + arg);
             }
 
-            inputWriter.WriteLine("exit");
+						proc.StandardInput.WriteLine("exit");
 
             string err = proc.StandardError.ReadToEnd();
             if (!string.IsNullOrWhiteSpace(err))
@@ -91,7 +102,10 @@ namespace CCtoGit
                 throw new ApplicationException(err);
             }
 
-            return proc.StandardOutput.ReadToEnd();
+						// 비동기로 실행되는 ReadExecutionResult 함수가 아직 끝까지 읽지 못한 경우, 기다린다.
+						proc.WaitForExit();
+
+						return this.ExecutionResult;
         }
 
         /// <summary>

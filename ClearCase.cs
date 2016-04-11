@@ -14,7 +14,7 @@ namespace CCtoGit
         {
             get
             {
-                return "'"
+                return @""""
                 + "Attributes=%a"
                 + "|Comment=%Nc"
                 + "|CreatedDate=%d"
@@ -33,7 +33,7 @@ namespace CCtoGit
                 + "|OwnerLoginName=%[owner]p"
                 + "|OwnerFullName=%[owner]Fp"
                 + "|HyperLink=%[hlink]p"
-                + "\n'";
+                + @"\n""";
             }
         }
 
@@ -50,12 +50,15 @@ namespace CCtoGit
         public List<CCElementVersion> Lshistory(string branch, List<string> pnameList)
         {
             List<string> argList = new List<string>(pnameList.Count);
-            pnameList.ForEach(pname => argList.Add("lshistory -fmt " + this.fmt + " " + pname));
+            pnameList.ForEach(pname => argList.Add("lshistory -fmt " + this.fmt + @" """ + pname + @""""));
 
             List<CCElementVersion> resultList = new List<CCElementVersion>();
 
-            GetExecutedResultList(argList).ForEach(elemVersion => resultList.Add(
-                new CCElementVersion(this.VobPath, elemVersion)));
+						foreach (string lines in GetExecutedResultList(argList))
+						{
+							List<string> lineList = lines.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
+							lineList.ForEach(elemVersion => resultList.Add(new CCElementVersion(this.VobPath, elemVersion)));
+						}
 
             return resultList;
         }
