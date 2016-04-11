@@ -20,9 +20,10 @@ namespace CCtoGit
             ClearCase cc = new ClearCase(absVobPath);
             Git git = new Git(absRepoPath);
 
-            // 1. Vob 내 파일의 history 수집, 정렬
-            List<CCElementVersion> ccVersionList = cc.Lshistory("main", srcFileList);
-            ccVersionList.Sort((x, y) => x.CreatedDate.CompareTo(y.CreatedDate));
+            // 1. Vob 내 파일의 history 수집, 정렬.
+						// 파일 또는 브랜치 생성 등의 작업은 제외
+						List<CCElementVersion> ccCheckedInVersionList = cc.Lshistory("main", srcFileList).Where(ver => ver.Operation == "checkin").ToList();
+						ccCheckedInVersionList.Sort((x, y) => x.CreatedDate.CompareTo(y.CreatedDate));
 
             // 2. Commit 할 단위로 history 묶기
             // todo : 옵션 선택 가능
@@ -30,14 +31,20 @@ namespace CCtoGit
             //     - 동일 사용자가 연속으로 check in 하였으면 하나의 commit 단위로 묶기
 
             // 3. CC checkout, 복사, Git Commit
-            foreach(CCElementVersion ccVersion in ccVersionList)
+						foreach (CCElementVersion ccVersion in ccCheckedInVersionList)
             {
-                cc.Checkout(ccVersion);
+							cc.Checkout(ccVersion);
 
-                File.Copy(Path.Combine(absVobPath, ccVersion.ElementName), Path.Combine(absRepoPath, ccVersion.ElementName));
+							string filePathInRepo = Path.Combine(absRepoPath, ccVersion.RelPathToVob);
+							if (!Directory.Exists(Path.GetDirectoryName(filePathInRepo)))
+							{
+								Directory.CreateDirectory(Path.GetDirectoryName(filePathInRepo));
+							}
+							File.Copy(ccVersion.ElementName, filePathInRepo, true);
 
-                git.Commit(ccVersion.Comment, ccVersion.OwnerLoginName, ccVersion.CreatedDate);
-                cc.Uncheckout(ccVersion.ElementName);
+							git.AddAll();
+							git.Commit(ccVersion.OwnerLoginName + " <" + ccVersion.OwnerFullName + ">", ccVersion.CreatedDate, ccVersion.Comment);
+							cc.Uncheckout(ccVersion.ElementName);
             }
         }
     }

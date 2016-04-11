@@ -63,6 +63,21 @@ namespace CCtoGit
 
         public string VobPath { get; set; }
 
+				public string RelPathToVob
+				{
+					get
+					{
+						if (ElementName.StartsWith(VobPath))
+						{
+							return ElementName.Replace(VobPath + "\\", string.Empty);
+						}
+						else
+						{
+							return ElementName;
+						}
+					}
+				}
+
         public string Branch
         {
             get

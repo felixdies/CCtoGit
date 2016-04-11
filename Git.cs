@@ -17,9 +17,21 @@ namespace CCtoGit
             this.RepoPath = repoPath;
         }
 
-        internal void Commit(string message, string author, DateTime date)
+				internal void AddAll()
+				{
+					Execute("add .");
+				}
+
+        internal void Commit(string author, DateTime date, string message)
         {
-            Execute("commit --author='" + author + "' --date='" + date.ToString() + "' -am '" + message + "'");
+					if(string.IsNullOrWhiteSpace(message))
+					{
+						Execute(@"commit --author=""" + author + @""" --date=""" + date.ToString("ddd MMM d HH:mm:ss yyyy K", new System.Globalization.CultureInfo("en-US")) + @""" -m ""migrated from ClearCase""");
+					}
+					else
+					{
+						Execute(@"commit --author=""" + author + @""" --date=""" + date.ToString("ddd MMM d HH:mm:ss yyyy K", new System.Globalization.CultureInfo("en-US")) + @""" -m ""migrated from ClearCase\n" + message.Trim() + @"""");
+					}
         }
     }
 }

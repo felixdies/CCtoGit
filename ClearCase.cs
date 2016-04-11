@@ -65,12 +65,12 @@ namespace CCtoGit
 
         public void Checkout(CCElementVersion element)
         {
-            Execute("checkout -unreserved -ncomment -version \\" + element.Version + " " + element.ElementName);
+					Execute(@"checkout -unreserved -ncomment -version """ + element.ElementName + "@@" + element.Version + @"""");
         }
 
         public void Uncheckout(string pname)
         {
-            Execute("uncheckout -keep " + pname);
+					Execute(@"uncheckout -rm """ + pname + @"""");
         }
     }
 }

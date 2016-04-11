@@ -22,46 +22,21 @@ namespace CCtoGit
             this.ExecutingPath = executingPath;
         }
 
-        /// <summary>
-        /// 첫 번째 매개변수를 인자로 하는 Command 를 실행 합니다.
-        /// </summary>
-        /// <param name="arg"></param>
-        /// <param name="wait">해당 명령을 synchronized 처리합니다.</param>
-        protected void Execute(string arg, bool wait = true)
-        {
-            Process proc = new Process();
-            ProcessStartInfo proInfo = new ProcessStartInfo()
-            {
-                WorkingDirectory = ExecutingPath,
-                FileName = @"powershell", // "cmd" doesn't execute the passed command.
-                Arguments = Command + " " + arg,
-                CreateNoWindow = true,
-                UseShellExecute = false,
-                RedirectStandardError = true
-            };
-
-            proc.StartInfo = proInfo;
-            proc.Start();
-
-            if (wait)
-            {
-                using (StreamReader errReader = proc.StandardError)
-                {
-                    string err = errReader.ReadToEnd(); // wait for exit
-                    if (!string.IsNullOrWhiteSpace(err))
-                    {
-                        throw new ApplicationException(err);
-                    }
-                }
-            }
-        }
-
 				private void ReadExecutionResult(object sendingProcess, DataReceivedEventArgs outLine)
 				{
 					if (!String.IsNullOrEmpty(outLine.Data))
 					{
 						this.ExecutionResult += outLine.Data + Environment.NewLine;
 					}
+				}
+
+				/// <summary>
+				/// 주어진 명령어를 실행한다.
+				/// Input 을 redirect 하기 위해 CreateNoWindow 를 false 로 설정하므로, 커맨드창이 나타나는 부작용이 있다.
+				/// </summary>
+				protected void Execute(string arg)
+				{
+					GetExecutedResult(new List<string>(new string[] { arg }));
 				}
 
         /// <summary>
