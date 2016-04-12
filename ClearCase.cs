@@ -44,13 +44,35 @@ namespace CCtoGit
             this.VobPath = vobPath;
         }
 
+			/// <summary>
+				/// 주어진 파일이 CheckIn 등을 통해 vob object 로 등록 된 파일인 지 여부를 반환
+				/// ls 결과에 @@\main 이 포함 돼 있다면 vob object 로 판단한다.
+			/// </summary>
+				public bool IsVobObject(string pname)
+				{
+					List<string> argList = new List<string>();
+					argList.Add("ls" + @" """ + pname + @"""");
+
+					List<string> lsResult = GetExecutedResultList(argList);
+
+					return lsResult[0].IndexOf("@@\\main") != -1;
+				}
+
         /// <summary>
         /// 매개변수로 주어진 파일에서 해당 브랜치로 작업한 ClearCase history 반환
         /// </summary>
         public List<CCElementVersion> Lshistory(string branch, List<string> pnameList)
         {
             List<string> argList = new List<string>(pnameList.Count);
-            pnameList.ForEach(pname => argList.Add("lshistory -fmt " + this.fmt + @" """ + pname + @""""));
+
+						foreach (string pname in pnameList)
+						{
+							// CheckIn 등을 통해 vob object 로 등록 된 파일에만 적용
+							if (IsVobObject(pname))
+							{
+								argList.Add("lshistory -fmt " + this.fmt + @" """ + pname + @"""");
+							}
+						}
 
             List<CCElementVersion> resultList = new List<CCElementVersion>();
 
