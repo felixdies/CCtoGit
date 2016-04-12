@@ -11,7 +11,7 @@ namespace CCtoGit
 {
     public abstract class Executor
     {
-			private string ExecutionResult = string.Empty;
+			private List<string> ExecutionResult = null;
 
         protected abstract string Command { get; }
 
@@ -26,7 +26,7 @@ namespace CCtoGit
 				{
 					if (!String.IsNullOrEmpty(outLine.Data))
 					{
-						this.ExecutionResult += outLine.Data + Environment.NewLine;
+						this.ExecutionResult.Add(outLine.Data);
 					}
 				}
 
@@ -43,9 +43,9 @@ namespace CCtoGit
         /// 주어진 명령어 리스트를 모두 실행하고 그 결과를 반환 한다.
         /// Input 을 redirect 하기 위해 CreateNoWindow 를 false 로 설정하므로, 커맨드창이 나타나는 부작용이 있다.
         /// </summary>
-        protected string GetExecutedResult(List<string> argList)
+        private List<string> GetExecutedResult(List<string> argList)
         {
-					this.ExecutionResult = string.Empty;
+					this.ExecutionResult = new List<string>();
 
             ProcessStartInfo proInfo = new ProcessStartInfo("cmd")
             {
@@ -90,8 +90,7 @@ namespace CCtoGit
         /// </summary>
         protected List<string> GetExecutedResultList(List<string> argList)
         {
-            string executedResult = GetExecutedResult(argList);
-            string[] resultLines = executedResult.Split(Environment.NewLine.ToCharArray());
+            List<string> resultLines = GetExecutedResult(argList);
 
             List<string> resultList = Enumerable.Repeat(string.Empty, argList.Count).ToList();
 
