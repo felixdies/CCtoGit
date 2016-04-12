@@ -50,7 +50,7 @@ namespace CCtoGit
             ProcessStartInfo proInfo = new ProcessStartInfo("cmd")
             {
                 WorkingDirectory = ExecutingPath,
-                CreateNoWindow = false,
+                CreateNoWindow = true,
                 UseShellExecute = false,
                 RedirectStandardInput = true,
                 RedirectStandardOutput = true,

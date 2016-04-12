@@ -33,6 +33,11 @@ namespace CCtoGit
             // 3. CC checkout, 복사, Git Commit
 						foreach (CCElementVersion ccVersion in ccCheckedInVersionList)
             {
+							if(cc.IsCheckedOut(ccVersion.ElementName))
+							{
+								// 체크아웃이 되어 있다면 keep 하면서 체크아웃을 해제한다.
+								cc.Uncheckout(ccVersion.ElementName, true);
+							}
 							cc.Checkout(ccVersion);
 
 							string filePathInRepo = Path.Combine(absRepoPath, ccVersion.RelPathToVob);
@@ -44,7 +49,7 @@ namespace CCtoGit
 
 							git.AddAll();
 							git.Commit(ccVersion.OwnerLoginName + " <" + ccVersion.OwnerFullName + ">", ccVersion.CreatedDate, ccVersion.Comment);
-							cc.Uncheckout(ccVersion.ElementName);
+							cc.Uncheckout(ccVersion.ElementName, false);
             }
         }
     }

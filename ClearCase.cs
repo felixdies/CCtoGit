@@ -44,10 +44,10 @@ namespace CCtoGit
             this.VobPath = vobPath;
         }
 
-			/// <summary>
+				/// <summary>
 				/// 주어진 파일이 CheckIn 등을 통해 vob object 로 등록 된 파일인 지 여부를 반환
 				/// ls 결과에 @@\main 이 포함 돼 있다면 vob object 로 판단한다.
-			/// </summary>
+				/// </summary>
 				public bool IsVobObject(string pname)
 				{
 					List<string> argList = new List<string>();
@@ -56,6 +56,20 @@ namespace CCtoGit
 					List<string> lsResult = GetExecutedResultList(argList);
 
 					return lsResult[0].IndexOf("@@\\main") != -1;
+				}
+
+				/// <summary>
+				/// 주어진 파일이 Checked Out 상태인 지 여부를 반환
+				/// ls 결과에 Rule: CHECKEDOUT 이 포함 돼 있다면 Checked Out 상태로 판단한다.
+				/// </summary>
+				public bool IsCheckedOut(string pname)
+				{
+					List<string> argList = new List<string>();
+					argList.Add("ls" + @" """ + pname + @"""");
+
+					List<string> lsResult = GetExecutedResultList(argList);
+
+					return lsResult[0].IndexOf("Rule: CHECKEDOUT") != -1;
 				}
 
         /// <summary>
@@ -90,9 +104,16 @@ namespace CCtoGit
 					Execute(@"checkout -unreserved -ncomment -version """ + element.ElementName + "@@" + element.Version + @"""");
         }
 
-        public void Uncheckout(string pname)
+        public void Uncheckout(string pname, bool keep)
         {
-					Execute(@"uncheckout -rm """ + pname + @"""");
+					if (keep)
+					{
+						Execute(@"uncheckout -keep """ + pname + @"""");
+					}
+					else
+					{
+						Execute(@"uncheckout -rm """ + pname + @"""");
+					}
         }
     }
 }

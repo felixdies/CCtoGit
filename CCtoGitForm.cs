@@ -73,6 +73,7 @@ namespace CCtoGit
                 try
                 {
                     new CCtoGit().Migrate(this.vobRootDir.ToString(), selectedCCFiles, this.repoRootDir.ToString());
+										MessageBox.Show("Migration 이 완료 되었습니다.");
                 }
                 catch (Exception ex)
                 {
