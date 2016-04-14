@@ -72,10 +72,16 @@ namespace CCtoGit
 						proc.StandardInput.WriteLine("exit");
 
             string err = proc.StandardError.ReadToEnd();
-            if (!string.IsNullOrWhiteSpace(err))
-            {
-                throw new ApplicationException(err);
-            }
+						if (err.StartsWith("cleartool: Warning: Version checked out") //("\main\1")
+							&& err.Contains("is different from version selected by view before checkout")) //("\main\2")
+						{
+							// 현재 View 에서 보는 main/Latest 버전이 main/2 인데 main/1 을 체크아웃 하려 하면 위와 같은 경고가 나타난다.
+							// 이 경고는 무시한다.
+						}
+						else if (!string.IsNullOrWhiteSpace(err))
+						{
+							throw new ApplicationException(err);
+						}
 
 						// 비동기로 실행되는 ReadExecutionResult 함수가 아직 끝까지 읽지 못한 경우, 기다린다.
 						proc.WaitForExit();

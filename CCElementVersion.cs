@@ -9,7 +9,7 @@ namespace CCtoGit
 {
     public class CCElementVersion
     {
-        internal CCElementVersion()
+        public CCElementVersion()
         {
         }
 
